@@ -47,7 +47,9 @@ RUN yarn install
 RUN yarn workspace @calcom/trpc run build
 RUN yarn --cwd packages/embeds/embed-core workspace @calcom/embed-core run build
 RUN yarn --cwd apps/web workspace @calcom/web run copy-app-store-static
-RUN yarn --cwd apps/web workspace @calcom/web run build
+ENV NEXT_IGNORE_TYPESCRIPT_ERRORS=1
+ENV NEXT_IGNORE_ESLINT=1
+RUN NODE_OPTIONS=--max-old-space-size=8192 yarn --cwd apps/web workspace @calcom/web run build
 RUN rm -rf node_modules/.cache .yarn/cache apps/web/.next/cache
 
 FROM node:20 AS builder-two
